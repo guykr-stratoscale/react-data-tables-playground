@@ -1,2 +1,4 @@
-.cblue {color: blue;}
-.selected { background: blue}
+.selected td {
+    background-color: blue!important;
+    color: white!important;
+}
