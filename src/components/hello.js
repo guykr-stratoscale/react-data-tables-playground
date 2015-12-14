@@ -1,8 +1,30 @@
 import React from 'react';
-import Griddle from 'griddle-react';
+import DataGrid from 'react-datagrid';
 import {fromJS, Set} from 'immutable';
 
 const rowCount = 1000;
+const columns = [
+  {
+    name: 'id',
+    title: '#',
+    width: 50,
+  },
+  {
+    name: 'colA',
+    title: 'Column A',
+    width: 100,
+  },
+  {
+    name: 'colB',
+    title: 'Column B',
+    width: 100,
+  },
+  {
+    name: 'colC',
+    title: 'Column C',
+    width: 100,
+  },
+];
 
 const getData = () => {
   const res = [];
@@ -25,44 +47,28 @@ export default class Hello extends React.Component {
   constructor() {
     super();
     this.state = {
-      selectedIds: Set(),
+      selectedIds: fromJS({}),
     };
   };
 
-  handleClick = () => {
-    const _this = this;
-
-    return function() {
-      let newState;
-
-      // here this is the row
-      const clickedId = this.data.id;
-      if (_this.state.selectedIds.contains(clickedId)) {
-        newState = _this.state.selectedIds.delete(clickedId);
-      } else {
-        newState = _this.state.selectedIds.add(clickedId);
-      }
-
-      _this.setState({
-        selectedIds: newState,
-      });
-
-    };
+  handleClick = (newSelection) => {
+    this.setState({
+      selectedIds: fromJS(newSelection),
+    });
   };
 
   render() {
-    const rowMetadata = {
-      bodyCssClassName: (rowData) => {
-        if (this.state.selectedIds.contains(rowData.id)) {
-          return 'selected';
-        }
-
-        return 'default-row';
-      },
-    };
+    debugger
     return (
       <div>
-        <Griddle results={rows} onRowClick={this.handleClick()} enableInfiniteScroll={true} bodyHeight={400} useFixedHeader={true} rowHeight={20} rowMetadata={rowMetadata}/>
+        <DataGrid
+          idProperty='id'
+          dataSource={rows}
+          columns={columns}
+          style={{height: 400}}
+          selected={this.state.selectedIds.toJS()}
+          onSelectionChange={this.handleClick}
+        />
       </div>
     );
   }
