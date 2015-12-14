@@ -30,6 +30,8 @@
     "webpack-dev-server": "^1.10.1"
   },
   "dependencies": {
-    "react": "^0.13.3"
+    "fixed-data-table": "^0.6.0",
+    "react": "^0.14",
+    "react-dom": "^0.14"
   }
 }
