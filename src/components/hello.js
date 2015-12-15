@@ -44,24 +44,6 @@ const getData = () => {
 const rows = getData();
 const initialState = Set();
 
-class ClickableCell extends React.Component {
-  render() {
-    return (
-      <div className={this.props.selected ? 'selected' : null} onClick={this.props.onClick}>{this.props.cellData}</div>
-    );
-  }
-};
-
-const clickableCellRenderer = function(cellData, cellDataKey, rowData, rowIndex, columnData) {
-  return (
-    <ClickableCell
-      onClick={() => this.handleClick(rowIndex, rowData) }
-      cellData={cellData}
-      selected={this.state.selectedRows.contains(rowIndex)}
-    />
-  );
-}
-
 export default class Hello extends React.Component {
   constructor() {
     super();
@@ -93,30 +75,27 @@ export default class Hello extends React.Component {
           rowsCount={rows.length}
           rowGetter={index => rows[index]}
           rowClassName={rowIndex => this.state.selectedRows.contains(rowIndex) ? 'selected' : null }
+          rowClicked={this.handleClick}
         >
           <FlexColumn
             label='ID'
             dataKey='id'
             width={100}
-            cellRenderer={clickableCellRenderer.bind(this)}
           />
           <FlexColumn
             width={200}
             label='Col A'
             dataKey='colA'
-            cellRenderer={clickableCellRenderer.bind(this)}
           />
           <FlexColumn
             width={200}
             label='Col B'
             dataKey='colB'
-            cellRenderer={clickableCellRenderer.bind(this)}
           />
           <FlexColumn
             width={200}
             label='Col C'
             dataKey='colC'
-            cellRenderer={clickableCellRenderer.bind(this)}
           />
         </FlexTable>
       </div>

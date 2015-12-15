@@ -260,6 +260,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	       * (dataKey: string, sortDirection: SortDirection): void
 	       */
 	      sort: _react.PropTypes.func,
+	      /** Optional click handler **/
+	      rowClicked: _react.PropTypes.func,
 	      /** FlexTable data is currently sorted by this :dataKey (if it is sorted at all) */
 	      sortBy: _react.PropTypes.string,
 	      /** FlexTable data is currently sorted in this direction (if it is sorted at all) */
@@ -454,20 +456,27 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var rowClassName = _props4.rowClassName;
 	      var rowGetter = _props4.rowGetter;
 	      var rowHeight = _props4.rowHeight;
+	      var rowClicked = _props4.rowClicked;
 	
+	      var rowData = rowGetter(rowIndex);
 	      var renderedRow = _react2['default'].Children.map(children, function (column, columnIndex) {
-	        return _this3._createColumn(column, columnIndex, rowGetter(rowIndex), rowIndex);
+	        return _this3._createColumn(column, columnIndex, rowData, rowIndex);
 	      });
 	
 	      var _rowClassName = rowClassName;
 	      if (rowClassName instanceof Function) {
-	        _rowClassName = rowClassName(rowIndex, rowGetter(rowIndex));
+	        _rowClassName = rowClassName(rowIndex, rowData);
 	      }
 	
 	      return _react2['default'].createElement(
 	        'div',
 	        {
 	          key: rowIndex,
+	          onClick: function () {
+	            if (rowClicked instanceof Function) {
+	              rowClicked(rowIndex, rowData);
+	            }
+	          },
 	          className: (0, _classnames2['default'])(_FlexTableCss2['default'].row, _rowClassName),
 	          style: {
 	            height: rowHeight
