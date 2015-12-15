@@ -1,5 +1,5 @@
 import React from 'react';
-import DataGrid from 'react-datagrid';
+import { FlexTable, FlexColumn } from '../react-virtualized';
 import {fromJS, Set} from 'immutable';
 
 const rowCount = 1000;
@@ -42,25 +42,42 @@ const getData = () => {
 };
 
 const rows = getData();
-const initialState = fromJS({});
+const initialState = Set();
+
+class ClickableCell extends React.Component {
+  render() {
+    return (
+      <div className={this.props.selected ? 'selected' : null} onClick={this.props.onClick}>{this.props.cellData}</div>
+    );
+  }
+};
+
+const clickableCellRenderer = function(cellData, cellDataKey, rowData, rowIndex, columnData) {
+  return (
+    <ClickableCell
+      onClick={() => this.handleClick(rowIndex, rowData) }
+      cellData={cellData}
+      selected={this.state.selectedRows.contains(rowIndex)}
+    />
+  );
+}
+
 export default class Hello extends React.Component {
   constructor() {
     super();
     this.state = {
-      selectedIds: initialState,
+      selectedRows: initialState,
     };
   };
 
-  handleClick = (newSelection) => {
+  handleClick = (rowIndex, rowData) => {
     this.setState({
-      selectedIds: this.state.selectedIds.withMutations(state => {
-        Object.keys(newSelection).forEach(key => {
-          if (state.has(key)) {
-            state.delete(key);
-          } else {
-            state.set(key, newSelection[key]);
-          }
-        });
+      selectedRows: this.state.selectedRows.withMutations(state => {
+        if (state.contains(rowIndex)) {
+          state.delete(rowIndex);
+        } else {
+          state.add(rowIndex);
+        }
       }),
     });
   };
@@ -68,14 +85,40 @@ export default class Hello extends React.Component {
   render() {
     return (
       <div>
-        <DataGrid
-          idProperty='id'
-          dataSource={rows}
-          columns={columns}
-          style={{height: 400}}
-          selected={this.state.selectedIds.toJS()}
-          onSelectionChange={this.handleClick}
-        />
+        <FlexTable
+          width={300}
+          height={600}
+          headerHeight={20}
+          rowHeight={30}
+          rowsCount={rows.length}
+          rowGetter={index => rows[index]}
+          rowClassName={rowIndex => this.state.selectedRows.contains(rowIndex) ? 'selected' : null }
+        >
+          <FlexColumn
+            label='ID'
+            dataKey='id'
+            width={100}
+            cellRenderer={clickableCellRenderer.bind(this)}
+          />
+          <FlexColumn
+            width={200}
+            label='Col A'
+            dataKey='colA'
+            cellRenderer={clickableCellRenderer.bind(this)}
+          />
+          <FlexColumn
+            width={200}
+            label='Col B'
+            dataKey='colB'
+            cellRenderer={clickableCellRenderer.bind(this)}
+          />
+          <FlexColumn
+            width={200}
+            label='Col C'
+            dataKey='colC'
+            cellRenderer={clickableCellRenderer.bind(this)}
+          />
+        </FlexTable>
       </div>
     );
   }
