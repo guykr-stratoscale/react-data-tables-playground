@@ -42,23 +42,30 @@ const getData = () => {
 };
 
 const rows = getData();
-
+const initialState = fromJS({});
 export default class Hello extends React.Component {
   constructor() {
     super();
     this.state = {
-      selectedIds: fromJS({}),
+      selectedIds: initialState,
     };
   };
 
   handleClick = (newSelection) => {
     this.setState({
-      selectedIds: fromJS(newSelection),
+      selectedIds: this.state.selectedIds.withMutations(state => {
+        Object.keys(newSelection).forEach(key => {
+          if (state.has(key)) {
+            state.delete(key);
+          } else {
+            state.set(key, newSelection[key]);
+          }
+        });
+      }),
     });
   };
 
   render() {
-    debugger
     return (
       <div>
         <DataGrid
