@@ -1,5 +1,5 @@
 import React from 'react';
-import { FlexTable, FlexColumn } from '../react-virtualized';
+import { FlexTable, FlexColumn } from 'react-virtualized';
 import {fromJS, Set} from 'immutable';
 
 const rowCount = 1000;

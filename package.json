@@ -33,7 +33,7 @@
     "immutable": "^3.7.5",
     "react": "^0.14",
     "react-dom": "^0.14",
-    "react-virtualized": "^2.1.1",
+    "react-virtualized": "^2.3.0",
     "underscore": "^1.8.3"
   }
 }
