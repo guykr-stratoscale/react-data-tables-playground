@@ -215,6 +215,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	      noRowsRenderer: function noRowsRenderer() {
 	        return null;
 	      },
+	      onRowClick: function onRowClick() {
+	        return null;
+	      },
 	      verticalPadding: 0
 	    },
 	    enumerable: true
@@ -244,6 +247,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	      horizontalPadding: _react.PropTypes.number,
 	      /** Optional renderer to be used in place of table body rows when rowsCount is 0 */
 	      noRowsRenderer: _react.PropTypes.func,
+	      /**
+	       * Callback invoked when a user clicks on a table row.
+	       * (rowIndex: number): void
+	       */
+	      onRowClick: _react.PropTypes.func,
 	      /** Optional CSS class to apply to all table rows (including the header row) */
 	      rowClassName: _react.PropTypes.oneOfType([_react.PropTypes.string, _react.PropTypes.func]),
 	      /**
@@ -260,8 +268,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	       * (dataKey: string, sortDirection: SortDirection): void
 	       */
 	      sort: _react.PropTypes.func,
-	      /** Optional click handler **/
-	      rowClicked: _react.PropTypes.func,
 	      /** FlexTable data is currently sorted by this :dataKey (if it is sorted at all) */
 	      sortBy: _react.PropTypes.string,
 	      /** FlexTable data is currently sorted in this direction (if it is sorted at all) */
@@ -334,6 +340,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var rowRenderer = function rowRenderer(index) {
 	        return _this2._createRow(index);
 	      };
+	      var rowClass = rowClassName instanceof Function ? rowClassName(-1) : rowClassName;
 	
 	      return _react2['default'].createElement(
 	        'div',
@@ -346,7 +353,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        !disableHeader && _react2['default'].createElement(
 	          'div',
 	          {
-	            className: (0, _classnames2['default'])(_FlexTableCss2['default'].headerRow, rowClassName),
+	            className: (0, _classnames2['default'])(_FlexTableCss2['default'].headerRow, rowClass),
 	            style: {
 	              height: headerHeight
 	            }
@@ -453,31 +460,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	      var _props4 = this.props;
 	      var children = _props4.children;
+	      var onRowClick = _props4.onRowClick;
 	      var rowClassName = _props4.rowClassName;
 	      var rowGetter = _props4.rowGetter;
 	      var rowHeight = _props4.rowHeight;
-	      var rowClicked = _props4.rowClicked;
 	
-	      var rowData = rowGetter(rowIndex);
+	      var rowClass = rowClassName instanceof Function ? rowClassName(rowIndex) : rowClassName;
 	      var renderedRow = _react2['default'].Children.map(children, function (column, columnIndex) {
-	        return _this3._createColumn(column, columnIndex, rowData, rowIndex);
+	        return _this3._createColumn(column, columnIndex, rowGetter(rowIndex), rowIndex);
 	      });
-	
-	      var _rowClassName = rowClassName;
-	      if (rowClassName instanceof Function) {
-	        _rowClassName = rowClassName(rowIndex, rowData);
-	      }
 	
 	      return _react2['default'].createElement(
 	        'div',
 	        {
 	          key: rowIndex,
+	          className: (0, _classnames2['default'])(_FlexTableCss2['default'].row, rowClass),
 	          onClick: function () {
-	            if (rowClicked instanceof Function) {
-	              rowClicked(rowIndex, rowData);
-	            }
+	            return onRowClick(rowIndex);
 	          },
-	          className: (0, _classnames2['default'])(_FlexTableCss2['default'].row, _rowClassName),
 	          style: {
 	            height: rowHeight
 	          }

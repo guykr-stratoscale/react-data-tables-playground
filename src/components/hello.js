@@ -75,7 +75,7 @@ export default class Hello extends React.Component {
           rowsCount={rows.length}
           rowGetter={index => rows[index]}
           rowClassName={rowIndex => this.state.selectedRows.contains(rowIndex) ? 'selected' : null }
-          rowClicked={this.handleClick}
+          onRowClick={this.handleClick}
         >
           <FlexColumn
             label='ID'
