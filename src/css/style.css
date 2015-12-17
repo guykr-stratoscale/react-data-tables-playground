@@ -2,3 +2,11 @@
     background-color: blue!important;
     color: white!important;
 }
+svg {
+    background: #808080;
+    border: 1px solid black;
+}
+circle {
+    fill: #C8FCC4;
+    stroke: black;
+}
