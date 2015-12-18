@@ -2,6 +2,9 @@ import React from 'react';
 import VictoryPerf from './victory-perf';
 import D3Perf from './d3-perf';
 import MotionPerf from './motion-perf';
+import Button from 'react-toolbox/lib/button'
+import Input from 'react-toolbox/lib/input';
+import { Card, CardMedia, CardTitle, CardText, CardActions } from 'react-toolbox/lib/card';
 
 const SIZE = 800;
 const MAX_CIRCLE_SIZE = 20;
@@ -71,10 +74,10 @@ export default class Perf extends React.Component {
     });
   }
 
-  handleCountChange = (e) => {
+  handleCountChange = (val) => {
     this.setState({
-      itemCount: e.target.value,
-      items: this.getData(e.target.value),
+      itemCount: val,
+      items: this.getData(val),
     });
   }
 
@@ -93,18 +96,22 @@ export default class Perf extends React.Component {
     }
     return (
       <div style={{padding: 10}}>
-      <h1>{this.state.tech}</h1>
       <div style={{marginBottom: 20}}>
-        <label>Item Count</label>
-        <input type='number' value={this.state.itemCount} onChange={this.handleCountChange} />
-        <button onClick={this.chooseVelocity}>Velocity</button>
-        <button onClick={this.chooseD3}>D3</button>
-        <button onClick={this.chooseMotion}>Motion</button>
+        <Input label='Item Count' type='number' value={this.state.itemCount} onChange={this.handleCountChange} />
+        <Button icon='motorcycle' onClick={this.handleClick} label={"Make'em Move!"} raised primary />
         <div style={{marginTop: 10}}>
-          <button onClick={this.handleClick}>move it</button>
+        <div style={{marginBottom: 10}}>Choose Tech</div>
+        <Button onClick={this.chooseVelocity} label={'Velocity'} raised accent={this.state.tech == 'velocity'} />
+        <Button onClick={this.chooseD3} label={'D3'} raised accent={this.state.tech == 'd3'} />
+        <Button onClick={this.chooseMotion} label={'Motion'} raised accent={this.state.tech == 'motion'} />
         </div>
       </div>
-      {componet}
+      <Card>
+      <center style={{marginBottom: 40, marginTop:40}}>
+        {componet}
+      </center>
+      </Card>
+
       </div>
     );
   }
